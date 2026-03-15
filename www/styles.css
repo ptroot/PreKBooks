@@ -1,0 +1,210 @@
+body {
+	font-family: Arial, sans-serif;
+}
+
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px;
+  font-size: 12px;
+  border: none;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #4CAF50;
+    min-width: 120px;
+    font-size: 12px;
+    border: 1px solid #ccc;
+}
+
+.dropdown-content a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: black;
+    font-size: 12px;
+}
+
+.dropdown-content a:hover {
+    background-color: #ddd;
+}
+
+ul {
+    list-style-type: none;
+    padding-left: 0;
+    margin-left: 0;
+}
+
+li {
+	margin-left: 4px;
+}
+
+.author{
+    font-size: 0.8em;
+    color: #666;
+}
+
+.box-label {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.book-list {
+	background-color: #f0f0f0;
+	display: none;
+	margin-top: 5px;
+	margin-left: 15px; /* indent books manually */
+}
+
+.box.open > .book-list {
+	display: block;
+}
+
+.selected-book {
+    background-color: #4CAF50;
+    font-weight: bold;
+}
+
+.layout {
+    display: flex;
+    gap: 30px;
+}
+
+.tree-panel {
+    width: 300px;
+    border-right: 1px solid #ccc;
+    padding-right: 20px;
+}
+
+.detail-panel {
+    flex: 1;
+}
+
+
+.tree-panel a:hover {
+    background-color: #eee;
+}
+
+table {
+	border: none
+	border-collapse: collapse;
+}
+
+th, td {
+	border: 0px solid #999;
+	padding: 6px;
+}
+
+th {
+	background-color: #eee;
+}
+
+/* Table styling */
+.add-book-table {
+    width: 30%;
+    border-collapse: collapse;
+    background-color: #E2E2E2;
+}
+
+.add-book-table th {
+    text-align: right;
+    padding: 8px 10px;
+    vertical-align: top;
+    width: 25%;
+}
+
+.add-book-table td {
+    padding: 8px 10px;
+}
+
+.amc-table {
+    width: 35%;
+    border-collapse: collapse;
+    background-color: #E2E2E2;
+}
+
+.amc-table th {
+    text-align: left;
+    padding: 8px 10px;
+    vertical-align: top;
+    width: 25%;
+}
+
+.amc-table td {
+    padding: 8px 10px;
+}
+
+/* Occasions grid */
+.occasions-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 columns */
+    gap: 6px 12px;
+}
+
+.occasions-grid label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: normal;
+}
+
+.occ-table {
+    width: 35%;
+    border-collapse: collapse;
+    background-color: #E2E2E2;
+}
+
+.occ-table th {
+    text-align: right;
+    padding: 8px 10px;
+    vertical-align: top;
+    width: 25%;
+}
+
+.occ-table td {
+    text-align: center;
+    padding: 8px 10px;
+}
+
+.red-text {
+	color: red;
+}
+
+.green-text {
+	color: green;
+}
+
+.book-row {
+    display: flex;
+    padding: 6px 8px;
+    border-radius: 4px;
+    transition: background-color 0.15s ease;
+}
+
+.book-row:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+}
+
+.book-header {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 5px;
+}
+
+.title {
+    flex: 3;
+}
+
+.author {
+    flex: 4;
+    color: #666;
+}
+
+.author-head {
+    flex: 4;
+}
