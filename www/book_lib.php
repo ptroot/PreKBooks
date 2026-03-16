@@ -42,7 +42,7 @@ function box_tree($conn) {
 			b.author	AS author
 		FROM box x
 		LEFT JOIN book b ON x.id = b.box_id
-		ORDER BY x.label, b.author, b.title
+		ORDER BY x.label, b.title
 	";
 
 	$result = $conn->query($sql);
@@ -329,3 +329,4 @@ function delete_occasion ($conn, $id) {
 	$stmt->close();
 }
 
+?>
