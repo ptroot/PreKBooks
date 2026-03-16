@@ -87,12 +87,6 @@ document.addEventListener("DOMContentLoaded", function() {
 						return;
 					}
 
-					// Build clickable search results
-					//const listItems = data.map(book => {
-					//	return `<br><a href="#" class="book-link" data-id="${book.id}">${book.title}</a>  ${book.author}`;
-					//}).join('');
-
-
 					const listItems = data.map(book => {
 						return `<div class="book-row">
 								<a href="#" class="book-link title" data-id="${book.id}">
