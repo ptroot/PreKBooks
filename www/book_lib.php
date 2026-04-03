@@ -1,4 +1,5 @@
 <?php
+
 // ===============================
 // Database Configuration
 // ===============================
@@ -16,8 +17,7 @@ function decrypt($data, $key) {
 // Connecting to the database
 function db_connect() {
 	include "vars.php";
-	// This needs work
-	$password = decrypt ($enc,'put something here');
+	$password = decrypt ($enc,'account_details');
 
 	$conn = new mysqli($host, $username, $password, $database);
 
@@ -97,9 +97,10 @@ function get_book ($conn, $id) {
 function search_book($searchString, $conn) {
 
 	// Search for the string in the occasion table (label) and in the book table (title and author)
-	$sql = "SELECT DISTINCT b.* FROM book b 
+	$sql = "SELECT DISTINCT b.*,bx.label FROM book b 
 			LEFT JOIN occ_book ob ON b.id = ob.book_id
 			LEFT JOIN occasion o  ON o.id = ob.occasion_id
+			LEFT JOIN box bx      ON b.box_id = bx.id
 			WHERE
 				o.label  LIKE ?
 			     OR b.title  LIKE ?
@@ -227,6 +228,16 @@ function get_boxes ($conn) {
 		$boxes[$id] = $row['label'];
 	}
 	return $boxes;
+}
+
+function get_box ($conn, $id) {
+	$stmt = $conn->prepare ("SELECT label FROM box WHERE id = ?");
+	$stmt->bind_param ('i', $id);
+	$stmt->execute();
+	$res = $stmt->get_result();
+
+	$row = $res->fetch_assoc();
+	return $row['label'];
 }
 
 function add_box ($conn, $label) {

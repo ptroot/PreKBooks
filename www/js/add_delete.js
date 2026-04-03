@@ -5,6 +5,24 @@ document.addEventListener("DOMContentLoaded", function () {
 	const dropdown = document.getElementById("myDropdown");
 	const detailPanel = document.getElementById("detailPanel");
 
+	function updatePanel(html) {
+		detailPanel.innerHTML = html;
+	}
+
+	function reloadTree() {
+		fetch("views/book_tree.php")
+		.then(res => res.text())
+		.then(html => {
+			document.getElementById("treePanel").innerHTML = html;
+
+			// reapply highlight after reload
+			if (window.loadBookDetails && window.currentBookId) {
+				loadBookDetails(currentBookId);
+			}
+		})
+		.catch(err => console.error("Tree reload failed:", err));
+	}
+
 	// Toggle dropdown on button click
 	button.addEventListener("click", function (e) {
 		e.stopPropagation();
@@ -27,19 +45,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	//	For loading into the inner HTML panel
 	function loadPanel(page) {
-		const panel = document.getElementById("detailPanel");
 
 		fetch("panel_loader.php?page=" + page)
 			.then(r => r.text())
-			.then(html => panel.innerHTML = html);
+			.then(html => detailPanel.innerHTML = html);
 	}
 
 	function reloadPanel() {
 		const params = new URLSearchParams(window.location.search);
-		const page  = params.get("panel") || "amc_box";
+		const page  = params.get("panel") || "add_book";
 
 		loadPanel(page);
 	}
+	
+	document.getElementById("treePanel").addEventListener("click", function(e) {
+		const toggle = e.target.closest(".box-label");
+		if (!toggle) return;
+
+		const box = toggle.closest(".box");
+		if (!box) return;
+
+		box.classList.toggle("open"); // 👈 must match CSS
+	});	
 
 	// Handle menu item clicks
 	document.querySelectorAll("#myDropdown a").forEach(item => {
@@ -73,7 +100,9 @@ document.addEventListener("DOMContentLoaded", function () {
 		})
 		.then(res => res.text())
 		.then(html => {
-			document.getElementById("detailPanel").innerHTML = html;
+			updatePanel(html);
+			// refresh the tree panel
+			reloadTree();
 		});
 	});
 
@@ -83,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const updateBox = e.target.closest(".update-box");
 		if (updateBox) {
 			e.preventDefault();
-			const id = e.target.dataset.id;
+			const id = updateBox.dataset.id;
 			const input = document.querySelector(`input.box-label-input[data-id='${id}']`);
 			const label = input.value;
 	
@@ -99,16 +128,20 @@ document.addEventListener("DOMContentLoaded", function () {
 	
 			post("api/modify_box.php", formData)
 				.then(html => {
-					document.getElementById("detailPanel").innerHTML = html;
-				});
+					updatePanel(html);
+					// refresh the tree panel
+					reloadTree();
+				})
+				.catch(err => console.error("Error:", err));
+			return;
 		}
 
 		// Update occasion
 		const updateOcc = e.target.closest(".update-occ");
 		if (updateOcc) {
 			e.preventDefault();
-			const id = e.target.dataset.id;
-			const input = document.querySelector(`input.box-label-input[data-id='${id}']`);
+			const id = updateOcc.dataset.id;
+			const input = document.querySelector(`input.occ-label-input[data-id='${id}']`);
 			const label = input.value;
 
 			console.log("updateOcc");
@@ -124,8 +157,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	
 			post("api/modify_occ.php", formData)
 				.then(html => {
-					document.getElementById("detailPanel").innerHTML = html;
-				});
+					updatePanel(html);
+				})
+				.catch(err => console.error("Error:", err));
+			return;
 		}
 
 		// Delete box
@@ -136,15 +171,20 @@ document.addEventListener("DOMContentLoaded", function () {
 			console.log("deleteBox");
 			if (!confirm("Delete this box? Books in the box will not be deleted.")) return;
 	
-			const id = e.target.dataset.id;
+			const id = deleteBox.dataset.id;
 			const formData = new FormData();
 			formData.append("id", id);
 			formData.append("action", "delete");
 	
 			post("api/modify_box.php", formData)
 				.then(html => {
-					document.getElementById("detailPanel").innerHTML = html;
-				});
+					updatePanel(html);
+
+					// refresh the tree panel
+					reloadTree();
+				})
+				.catch(err => console.error("Error:", err));
+			return;
 		}
 
 		// Delete occasion 
@@ -155,15 +195,17 @@ document.addEventListener("DOMContentLoaded", function () {
 			console.log("deleteOcc");
 			if (!confirm("Delete this theme?")) return;
 	
-			const id = e.target.dataset.id;
+			const id = deleteOcc.dataset.id;
 			const formData = new FormData();
 			formData.append("id", id);
 			formData.append("action", "delete");
 	
 			post("api/modify_occ.php", formData)
 				.then(html => {
-					document.getElementById("detailPanel").innerHTML = html;
-				});
+					updatePanel(html);
+				})
+				.catch(err => console.error("Error:", err));
+			return;
 		}
 
 		// Delete book
@@ -179,8 +221,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			post("api/delete_book.php", formData)
 				.then(html => {
-					document.getElementById("detailPanel").innerHTML = html;
-				});
+					updatePanel(html);
+
+					// refresh the tree panel
+					reloadTree();
+				})
+				.catch(err => console.error("Error:", err));
 			return;
 		}
 	});

@@ -1,5 +1,9 @@
 <?php
-require_once "book_lib.php";
+if (file_exists ("book_lib.php")) {
+	require_once "book_lib.php";
+} else {
+	require_once "../book_lib.php";
+}
 
 $conn = db_connect();
 

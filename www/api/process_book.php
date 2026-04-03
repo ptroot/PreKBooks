@@ -14,6 +14,7 @@ $occ = get_occasions($conn);
 $title = $_POST['title'] ?? null;
 $author = $_POST['author'] ?? null;
 $box_id = $_POST['box'] ?? null;
+$label = get_box ($conn, $box_id);
 
 if ($title == null || $title === '') {
 	echo "<br>Input error. Title of book must be provided</br>";
@@ -32,7 +33,7 @@ if ($res === 0) {
 
 echo "<table class='add-book-table'><tr><th>Title</th><td>" . htmlspecialchars($title) . "</td></tr>";
 echo "<tr><th>Author</th><td>" . htmlspecialchars($author) . "</td></tr>";
-echo "<tr><th>Box ID</th><td>" . htmlspecialchars($box_id) . "</td></tr>";
+echo "<tr><th>Box</th><td>" . htmlspecialchars($label) . "</td></tr>";
 echo "</table>";
 
 $occasions = $_POST['occasions'] ?? [];

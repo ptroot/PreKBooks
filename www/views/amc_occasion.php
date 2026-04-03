@@ -25,7 +25,7 @@ $conn = db_connect();
             <td><input type='text' name='label'></td>
             <td>
                 <input type='reset' value='Clear'>
-                <input type='submit'>
+                <input type='submit' value='Add Theme'>
             </td>
         </tr>
     </table>
@@ -43,7 +43,7 @@ $occasions = get_occasions($conn);
 foreach ($occasions as $id => $label) {
     echo "<tr>";
     echo "<td>
-            <input type='text' name='label' value='{$label}' data-id='{$id}' class='box-label-input'>
+            <input type='text' name='label' value='{$label}' data-id='{$id}' class='occ-label-input'>
           </td>";
     echo "<td>
             <button class='update-occ' data-id='{$id}'>Update</button>

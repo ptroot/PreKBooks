@@ -15,9 +15,9 @@
 	<div class="dropdown">
 		<button id="Selector" class='dropbtn'>Add/Delete</button>
 			<div id="myDropdown" class="dropdown-content">
+				<a href="#" data-page='add_book'>Add Book</a>
 				<a href="#" data-page='amc_box'>Add/Delete Box</a>
 				<a href="#" data-page='amc_occasion'>Add/Delete Theme</a>
-				<a href="#" data-page='add_book'>Add Book</a>
 			</div>
 		<button id="toggleButton" class='dropbtn'>Expand All</button>
 	</div>
