@@ -34,10 +34,11 @@ $dbauthor = trim ($book ['Author']);
 if ($author !== $dbauthor ) {
 	$updates['Author'] = "$author"; 
 }
-	
+
 $box_id = $_POST['box']; 
 $box_id = (int) $box_id;
 $box_name = $boxes[$box_id] ?? "FAILED";
+
 if ($box_name  !== $book['Box']) {
 	$updates['box_id'] = $box_id;
 }
@@ -50,7 +51,11 @@ if (!empty($updates)) {
 	$res = update_book ($conn, $bookId,  $updates);
 
 	foreach ($updates as $key => $value) {
-		echo "<tr><th>" . htmlspecialchars($key) . "</th><td>" . htmlspecialchars($value) . "</td></tr>";
+		if ($key === 'box_id') {
+			echo "<tr><th>Box</th><td>" . htmlspecialchars($boxes[$value]) . "</td></tr>";
+		} else {	
+			echo "<tr><th>" . htmlspecialchars($key) . "</th><td>" . htmlspecialchars($value) . "</td></tr>";
+		}
 	}
 
 	if ($res) {

@@ -1,7 +1,7 @@
 <?php include "topbar.php"; ?>
 <div class="layout">
 	<!-- Tree Panel -->
-	<div class="tree-panel">
+	<div class=tree-panel id='treePanel'>
 		<?php include "views/book_tree.php"; ?>
 	</div>
 	<div class="detail-panel" id="detailPanel">

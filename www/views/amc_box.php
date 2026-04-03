@@ -25,7 +25,7 @@ $conn = db_connect();
             <td><input type='text' name='label'></td>
             <td>
                 <input type='reset' value='Clear'>
-                <input type='submit'>
+                <input type='submit' value='Add Box'>
             </td>
         </tr>
     </table>

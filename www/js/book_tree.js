@@ -1,20 +1,20 @@
+console.log("book_tree.js loaded");
+
+let currentBookId = null;
+
 // -------------------- Collapsible Tree --------------------
 document.addEventListener("DOMContentLoaded", function() {
 
-	const toggleButton = document.getElementById("toggleButton");
-	const boxes = document.querySelectorAll(".box");
+	window.currentBookId = null;
 
-	// Individual box toggle
-	document.querySelectorAll('.box-label').forEach(label => {
-		label.addEventListener('click', function() {
-			this.parentElement.classList.toggle('open');
-		});
-	});
+	const toggleButton = document.getElementById("toggleButton");
 
 	let expanded = false;
 
 	toggleButton.addEventListener("click", function() {
 		expanded = !expanded;
+
+		const boxes = document.querySelectorAll(".box");
 
 		boxes.forEach(box => {
 			box.classList.toggle("open", expanded);
@@ -22,6 +22,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
 		toggleButton.textContent = expanded ? "Collapse All" : "Expand All";
 	});
+
+	// -------------------- Load Account Details --------------------
+	function loadBookDetails(bookId) {
+		window.currentBookId = bookId;
+
+		const detailPanel = document.getElementById('detailPanel');
+
+		// Load account details via AJAX
+		fetch(`views/book_detail.php?id=${bookId}`)
+		.then(response => response.text())
+		.then(html => {
+			detailPanel.innerHTML = html;
+		})
+		.catch(err => {
+			detailPanel.innerHTML = '<p>Error loading account details.</p>';
+			console.error(err);
+		});
+	}
+
+	window.loadBookDetails = loadBookDetails;
 
 	// -------------------- Load Account Details --------------------
 	function loadBookDetails(bookId) {
@@ -56,12 +76,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 	// -------------------- Tree book Click --------------------
-	document.querySelectorAll('.tree-book-link').forEach(link => {
-		link.addEventListener('click', function(e) {
-			e.preventDefault();
-			const bookId = this.dataset.id;
-			loadBookDetails(bookId);
-		});
+	document.getElementById("treePanel").addEventListener("click", function(e) {
+		const link = e.target.closest(".tree-book-link");
+		if (!link) return;
+
+		e.preventDefault();
+		const bookId = link.dataset.id;
+		loadBookDetails(bookId);
 	});
 
 	// -------------------- Live Search --------------------
@@ -87,18 +108,13 @@ document.addEventListener("DOMContentLoaded", function() {
 						return;
 					}
 
-					// Build clickable search results
-					//const listItems = data.map(book => {
-					//	return `<br><a href="#" class="book-link" data-id="${book.id}">${book.title}</a>  ${book.author}`;
-					//}).join('');
-
-
 					const listItems = data.map(book => {
 						return `<div class="book-row">
 								<a href="#" class="book-link title" data-id="${book.id}">
 									${book.title}
 								</a>
 								<span class="author">${book.author}</span>
+								<span class='box_id'>${book.label}</span>
 							</div>`;
 					}).join('');
 
@@ -106,6 +122,7 @@ document.addEventListener("DOMContentLoaded", function() {
 								<div class="book-header">
 									<span class='title'>Title</span>
 									<span class='author-head'>Author</span>
+									<span class='box_id-head'>Box</span>
 								</div>` + listItems;
 
 					// Attach click listeners
@@ -129,23 +146,8 @@ document.addEventListener("DOMContentLoaded", function() {
 	const params = new URLSearchParams(window.location.search);
 	const bookId = params.get('book_id');
 	if (bookId) {
-		loadAccountDetails(acctId);
+		loadAccountDetails(bookId);
 	}
 
-	document.addEventListener("submit", function(e) {
-		const form = e.target.closest(".ajax-form");
-		if (!form) return;
-
-		e.preventDefault();
-
-		fetch(form.action, {
-			method: "POST",
-			body: new FormData(form)
-		})
-		.then(res => res.text())
-		.then(html => {
-			document.getElementById("detailPanel").innerHTML = html;
-		});
-	});
 });
 

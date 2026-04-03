@@ -10,11 +10,6 @@ $conn = db_connect();
 
 $label = $_POST['label'] ?? null;
 
-//if ("$label" == null) {
-//	echo "<br>Input error. Label for box must be provided</br>";
-//	exit;
-//}
-
 echo "<h3>Addition of " . htmlspecialchars($label) . "</h3>";
 
 $res = add_box ($conn, $label);
