@@ -230,6 +230,18 @@ function get_boxes ($conn) {
 	return $boxes;
 }
 
+function get_boxes_with_counts ($conn) {
+	$sql = "select b.id, b.label as BOX, count(bo.id) as Book_Count from box b left join book bo on b.id = bo.box_id group by b.id order by b.label";
+	$result = $conn->query($sql);
+
+	$boxes = [];
+	while ($row = $result->fetch_assoc()) {
+		$id = (int)$row['id'];
+		$boxes[$id] = [ $row['BOX'], (int)$row['Book_Count'] ];
+	}
+	return $boxes;
+}
+
 function get_box ($conn, $id) {
 	$stmt = $conn->prepare ("SELECT label FROM box WHERE id = ?");
 	$stmt->bind_param ('i', $id);
@@ -284,6 +296,20 @@ function get_occasions ($conn) {
 	return $occ;
 }
 
+function get_occasions_with_counts ($conn) {
+	$sql = "SELECT o.id, o.label as Theme, COUNT(ob.occasion_id) as Theme_Count FROM occasion o
+		LEFT JOIN occ_book ob ON o.id = ob.occasion_id group by o.id, o.label 
+		order by Theme";
+
+	$result = $conn->query($sql);
+	$occ = [];
+
+	while ($row = $result->fetch_assoc()) {
+		$id = $row['id'];
+ 		$occ[$id] = [ $row['Theme'], $row['Theme_Count'] ];
+ 	}
+	return $occ;
+}
 function update_occasions ($conn, $bookId, $occasions) {
 	if ($occasions) {
 		$placeholders = implode(',', array_fill(0, count($occasions), '?')) ?? '';

@@ -35,16 +35,18 @@ $conn = db_connect();
 <table class="amc-table">
     <tr>
         <th>Theme</th>
+		<th>Book Count</th>
         <th>Actions</th>
     </tr>
 
 <?php
-$occasions = get_occasions($conn);
-foreach ($occasions as $id => $label) {
+$occasions = get_occasions_with_counts($conn);
+foreach ($occasions as $id => $array) {
     echo "<tr>";
     echo "<td>
-            <input type='text' name='label' value='{$label}' data-id='{$id}' class='occ-label-input'>
+            <input type='text' name='label' value='{$array[0]}' data-id='{$id}' class='occ-label-input'>
           </td>";
+	echo "<td>" . htmlspecialchars ($array[1]) . "</td>";
     echo "<td>
             <button class='update-occ' data-id='{$id}'>Update</button>
             <button class='delete-occ' data-id='{$id}'>Delete</button>

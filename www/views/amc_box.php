@@ -35,23 +35,28 @@ $conn = db_connect();
 <table class="amc-table">
     <tr>
         <th>Box Name</th>
+		<th>Book Count</th>
         <th>Actions</th>
     </tr>
 
 <?php
-$boxes = get_boxes ($conn);
-foreach ($boxes as $id => $label) {
-
+$boxes = get_boxes_with_counts ($conn);
+$book_count = 0;
+foreach ($boxes as $id => $array) {
     echo "<tr>";
     echo "<td>
-            <input type='text' name='label' value='{$label}' data-id='{$id}' class='box-label-input'>
+            <input type='text' name='label' value='{$array[0]}' data-id='{$id}' class='box-label-input'>
           </td>";
+	echo "<td>"  . htmlspecialchars ((int)$array[1]) . "</td>";
+	$book_count += (int)$array[1];
     echo "<td>
             <button class='update-box' data-id='{$id}'>Update</button>
             <button class='delete-box' data-id='{$id}'>Delete</button>
           </td>";
     echo "</tr>";
 }
+
+echo "<tr><th>Book Total</th><td>" . htmlspecialchars ($book_count) . "</td></tr>";
 ?>
 
 </table>
