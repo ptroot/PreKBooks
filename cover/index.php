@@ -4,12 +4,12 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Book Catalog</title>
-	<link rel="stylesheet" href="cover/styles.css">
-	<link rel="stylesheet" href="cover/dropdown.css">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="dropdown.css">
 </head>
 <body>
-<script src="cover/js/tree.js"> </script>
-<script src="cover/js/add_delete.js"></script>
+<script src="js/tree.js"> </script>
+<script src="js/add_delete.js"></script>
 <h2>Book Catalog</h2>
 <div class='menu'>
 	<div class="dropdown">
@@ -21,7 +21,7 @@
 </div>
 <div class=layout>
 <div class=tree-panel id='treePanel'>
-   <?php include "cover/tree_panel.php"; ?>
+   <?php include "tree_panel.php"; ?>
 </ul>
 </div>
 <div class="detail-panel" id="detailPanel">

@@ -1,0 +1,39 @@
+/* Dropdown Button */
+.dropbtn {
+  background-color: #4CAF50;
+  color: white;
+  padding: 8px;
+  font-size: 12px;
+  border: none;
+}
+
+.dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #4CAF50;
+	min-width: 120px;
+	font-size: 12px;
+	border: 1px solid #ccc;
+}
+
+.dropdown-content a {
+	display: block;
+	padding: 8px 12px;
+	text-decoration: none;
+	color: white;
+	font-size: 12px;
+}
+
+.dropdown-content a:hover {
+	background-color: #ddd;
+	color: black;
+}
+
+.show {
+	display: block;
+}
+
+#searchInput::placeholder {
+	color: #e8f5e9;   /* soft greenish white */
+	opacity: 1;
+}

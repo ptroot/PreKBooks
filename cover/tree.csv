@@ -1,4 +1,4 @@
-Books,http://localhost/prekbooks,Pre-school Books
-DB Admin,http://localhost/admin,Admin
-DB Admin,http://localhost/admin/phpmyadmin,PHP My Admin
-DB Admin,http://localhost/admin/adminer,Adminer
+Books,http://localhost/prek,"Pre-school Books"
+"DB Admin",http://localhost/admin,Admin
+"DB Admin",http://localhost/admin/phpmyadmin,"PHP My Admin"
+"DB Admin",http://localhost/admin/adminer/adminer-5.4.2-mysql.php,Adminer

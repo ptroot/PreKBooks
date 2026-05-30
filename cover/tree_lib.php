@@ -3,7 +3,7 @@
 		$tree = [];
 		$handle = fopen ($file, "r");
 		if ($handle) {
-			while (($line = fgetcsv ($handle)) !== false) {
+			while (($line = fgetcsv ($handle, 0, ",", '"', "\\")) !== false) {
 				$tree[$line[0]][$line[2]] = $line[1];
 			}
 
@@ -22,10 +22,10 @@
 		}
 
 		// The first backup of a day is its own file
-		$dest = "${backupdir}/${file}-${date}";
+		$dest = "{$backupdir}/{$file}-{$date}";
 		if (file_exists ("$dest")) {
 			// after the first, we'll just have the latest backup
-			$dest = "${backupdir}/${file}-${date}-tmp";
+			$dest = "{$backupdir}/{$file}-{$date}-tmp";
 		}
 
 		if (copy ($file, $dest)) {
@@ -36,12 +36,19 @@
 	}
 	
 	function writing_csv ($file, $tree) {
-		$handle = fopen ($file, "w");
+		if (file_exists($file) && !is_writable($file)) {
+			unlink($file);
+		}
+
+		$handle = fopen ("{$file}", "w");
+		if (!$handle) {
+			print_r(error_get_last());
+		}
 		if ($handle) {
 			foreach ($tree as $group => $urls) {
 				foreach ($urls as $label => $http) {
 					$data = [$group, $http, $label];
-					fputcsv($handle, $data);
+					fputcsv($handle, $data, ",", '"', "\\");
 				}
 			}
 			if (fclose ($handle)) {
