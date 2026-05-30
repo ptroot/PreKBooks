@@ -1,0 +1,4 @@
+Books,http://localhost/prekbooks,Pre-school Books
+DB Admin,http://localhost/admin,Admin
+DB Admin,http://localhost/admin/phpmyadmin,PHP My Admin
+DB Admin,http://localhost/admin/adminer,Adminer
