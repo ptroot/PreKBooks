@@ -25,7 +25,7 @@ if (-not (Test-Path "$InsLoc")) {
 # Extract the media
 if (Test-Path "$XAMPP_INSTALLER") {
 	Write-Host "Extracting the XAMPP-Lite web and database servers"
-	Write-Host "This will tak a little time"
+	Write-Host "This will take a few minutes (and quite a few if installing on a USB thumb drive) ..."
 	tar -xf $XAMPP_INSTALLER -C $InsLoc
 	$ret = $?
 	

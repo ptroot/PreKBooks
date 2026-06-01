@@ -33,6 +33,8 @@ $upw = Read-Host -AsSecureString  "Enter password for the database account contr
 $BSTR = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($upw)
 $uupw = [System.Runtime.InteropServices.Marshal]::PtrToStringAuto($BSTR)
 
+$upw| ConvertFrom-SecureString | Out-File "$Env:InsLoc\tmp\secure_pass.txt"
+
 & mysql.exe -u root --password="$urpw" -e "CREATE USER 'prek-app'@'%' IDENTIFIED BY '$uupw'"
 $uupw = "";
 & mysql.exe -u root --password="$urpw" -e "GRANT SELECT, INSERT, UPDATE, DELETE ON prekbooks.* TO 'prek-app'@'%';"
@@ -50,7 +52,7 @@ $content = $content -replace `
 Set-Content $file $content
 
 # Update adminer page
-$file = $env:InsLoc + "apps\admin\adminer\index.php"
+$file = $env:InsLoc + "\apps\admin\adminer\index.php"
 (Get-Content $file) -replace `
 "('password'\s*=>\s*')[^']*(',)",
 "`$1$urpw`$2" | Set-Content $file

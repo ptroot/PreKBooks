@@ -44,28 +44,29 @@ if ($ret -eq $true) {
 	exit 1
 }
 
-# Add XAMPP Control Panel to startup items
-$AppControl="XL-Control-Panel.x64"
+# The XAMPP_LITE_ROOT is the Installation location
+$env:XAMPP_LITE_ROOT="$InsLoc"
+$ControlPanel = "XL-Control-Panel.x64"
+$ControlPanelPath = $env:XAMPP_LITE_ROOT + '\' + $ControlPanel + '.exe'
 
+# Add XAMPP Control Panel to startup items
 $WshShell = New-Object -ComObject WScript.Shell
-$Shortcut = $WshShell.CreateShortcut("$Home\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\$AppControl.lnk")
+$Shortcut = $WshShell.CreateShortcut("$Home\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup\$ControlPanel.lnk")
 $Shortcut.TargetPath = "$InsLoc/$AppControl.exe"
 $Shortcut.WorkingDirectory = "$InsLoc"
 $Shortcut.Save()
 
 $env:Path += ";$InsLoc\apps\mysql\bin;$InsLoc\apps\php"
 
-# The XAMPP_LITE_ROOT is the Installation location
-$env:XAMPP_LITE_ROOT="$InsLoc"
-$ControlPanel = "XL-Control-Panel.x64"
-$ControlPanelPath = $env:XAMPP_LITE_ROOT + '\' + $ControlPanel + '.exe'
-
 # Start the XAMPP process
 Write-Host "Starting XAMPP Control Panel. You need do nothing in it at this time."
-Write-Host "Just minimize it and continue in this window"
-sleep -Seconds 5
-start-Process "$ControlPanelPath"
-sleep -Seconds 2
+Write-Host "Before continuing, wait for the port number (3306) for the MySQL database to appear. This can take a while when installing onto a USB thumb drive."
+Write-Host "If a dialog to allow MySQL/MariaDB pops up, allow it to run."
+Write-Host "Then minimize it and continue in this powershell window."
+Start-Sleep -Seconds 5
+Start-Process "$ControlPanelPath"
+Start-Sleep -Seconds 2
+Write-Host
 
 $upw = & ./scripts/create-database-and-users.ps1
 
@@ -76,17 +77,50 @@ Write-Host
 Write-Host "Restarting the Xampp Control panel now."
 Write-Host "Again, just minimize it and continue in this window."
 
-sleep -sleep 5
-Get-Process $ControlPanel -ErrorAction SilentlyContinue |Stop-Process -Force
-sleep -sleep 2
+Start-Sleep -Seconds 5
+
+$processNames = @("httpd", "mariadbd", "mysqld", "XL-Control-Panel.x64")
+$InsLen = $InsLoc.Length
+
+# 
+foreach ($name in $processNames) {
+	# Check if the process is running
+	$process = Get-Process -Name $name -ErrorAction SilentlyContinue
+   
+	if ($process) {
+		$ppath = $process.Path.ToLower().SubString(0,$InsLen)
+		print "ppath $ppath"
+		if ($ppath -eq $InsLoc.ToLower()) {
+			Write-Host "Stopping $name"
+			Stop-Process $process -Force
+		} else {
+			Write-Host "path doesn't match, nothing stopped"
+		}
+	} else {
+		Write-Host "$name process not found"
+	}
+}
+
+Start-Sleep -Seconds 2
 start-Process "$ControlPanelPath"
 
-& ./scripts/populate-www.ps1 $upw
+& ./scripts/populate-www.ps1 
+
+(Get-Content "./scripts/uninstall.ps1") -replace "installed-location", "$InsLoc" | Set-content "$InsLoc\uninstall.ps1"
+
 	
 # Note phpMyAdmin could be used for running bulk
 # provide examples for adding in bulk and commandline to run
 Write-Host "The file 'add-data.sql' found in the mariadb folder contains examples of bulk entering of books, boxes, and themes to the database."
 Write-Host "The commands found in it can be run using the mariadb.exe (mysql.exe) command or with the phpMyAdmin interface into the prekbooks database." 
 Write-Host "However, this is more advanced, requiring a basic understanding of database commands. Using the web pages is recommended"
+Write-Host
+Write-Host "If you have a final backup (dump) of the database. You can use the 'Import' tab in phpMyAdmin the prekbooks database to populate the database."
+Write-Host
+Write-Host "Now starting the newly installed home page to your browser.  Click on 'Books' then 'Pre-school Books', to access the database."
+sleep 2
+
+Start-Process http://localhost
+
 
 
