@@ -1,6 +1,7 @@
 CREATE DATABASE prekbooks;
 USE prekbooks;
 
+
 -- =========================
 -- BOX TABLE
 -- =========================
